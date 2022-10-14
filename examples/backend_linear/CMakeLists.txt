@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
 
 ##############################################################################
 # - Target names -------------------------------------------------------------
-set(BACKEND_NAME "rapids_linear")
+set(BACKEND_NAME "backend_linear")
 set(BACKEND_TARGET "triton_${BACKEND_NAME}")
 
 
@@ -33,9 +33,9 @@ include(rapids-cuda)
 include(rapids-export)
 include(rapids-find)
 
-rapids_cuda_init_architectures(RAPIDS_TRITON_BACKEND)
+rapids_cuda_init_architectures(dev_tools_BACKEND)
 
-project(RAPIDS_TRITON_BACKEND VERSION 21.10.00 LANGUAGES CXX CUDA)
+project(dev_tools_BACKEND VERSION 22.10.00 LANGUAGES CXX CUDA)
 
 ##############################################################################
 # - build type ---------------------------------------------------------------
@@ -49,23 +49,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ##############################################################################
 # - User Options  ------------------------------------------------------------
 
-option(BUILD_BACKEND_TESTS "Build rapids_triton_linear unit-tests" ON)
+option(BUILD_BACKEND_TESTS "Build dev_tools_linear unit-tests" ON)
 option(CUDA_ENABLE_KERNEL_INFO "Enable kernel resource usage info" OFF)
 option(CUDA_ENABLE_LINE_INFO "Enable lineinfo in nvcc" OFF)
 option(DETECT_CONDA_ENV "Enable detection of conda environment for dependencies" ON)
 option(DISABLE_DEPRECATION_WARNINGS "Disable depreaction warnings " ON)
 option(NVTX "Enable nvtx markers" OFF)
 
-message(VERBOSE "RAPIDS_TRITON_BACKEND: Enabling detection of conda environment for dependencies: ${DETECT_CONDA_ENV}")
-message(VERBOSE "RAPIDS_TRITON_BACKEND: Enabling kernelinfo in nvcc: ${CUDA_ENABLE_KERNEL_INFO}")
-message(VERBOSE "RAPIDS_TRITON_BACKEND: Enabling lineinfo in nvcc: ${CUDA_ENABLE_LINE_INFO}")
-message(VERBOSE "RAPIDS_TRITON_BACKEND: Enabling nvtx markers: ${NVTX}")
-message(VERBOSE "RAPIDS_TRITON_BACKEND: Build RAPIDS_TRITON_BACKEND unit-tests: ${BUILD_TESTS}")
+message(VERBOSE "dev_tools_BACKEND: Enabling detection of conda environment for dependencies: ${DETECT_CONDA_ENV}")
+message(VERBOSE "dev_tools_BACKEND: Enabling kernelinfo in nvcc: ${CUDA_ENABLE_KERNEL_INFO}")
+message(VERBOSE "dev_tools_BACKEND: Enabling lineinfo in nvcc: ${CUDA_ENABLE_LINE_INFO}")
+message(VERBOSE "dev_tools_BACKEND: Enabling nvtx markers: ${NVTX}")
+message(VERBOSE "dev_tools_BACKEND: Build dev_tools_BACKEND unit-tests: ${BUILD_TESTS}")
 
 # Set RMM logging level
 set(RMM_LOGGING_LEVEL "INFO" CACHE STRING "Choose the logging level.")
 set_property(CACHE RMM_LOGGING_LEVEL PROPERTY STRINGS "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "CRITICAL" "OFF")
-message(VERBOSE "RAPIDS_TRITON_BACKEND: RMM_LOGGING_LEVEL = '${RMM_LOGGING_LEVEL}'.")
+message(VERBOSE "dev_tools_BACKEND: RMM_LOGGING_LEVEL = '${RMM_LOGGING_LEVEL}'.")
 
 ##############################################################################
 # - Conda environment detection ----------------------------------------------
@@ -86,8 +86,8 @@ endif()
 # * enable the CMake CUDA language
 # * set other CUDA compilation flags
 rapids_find_package(CUDAToolkit REQUIRED
-    BUILD_EXPORT_SET cuml-exports
-    INSTALL_EXPORT_SET cuml-exports
+    BUILD_EXPORT_SET developer_tools_linear-exports
+    INSTALL_EXPORT_SET developer_tools_linear-exports
     )
 include(cmake/modules/ConfigureCUDA.cmake)
 
@@ -98,7 +98,7 @@ include(cmake/modules/ConfigureCUDA.cmake)
 rapids_cpm_init()
 
 # TODO(wphicks)
-include(cmake/thirdparty/get_rapids-triton.cmake)
+include(cmake/thirdparty/get_dev_tools.cmake)
 
 if(BUILD_TESTS)
   include(cmake/thirdparty/get_gtest.cmake)
@@ -126,18 +126,18 @@ PROPERTIES BUILD_RPATH                         "\$ORIGIN"
 )
 
 target_compile_options(${BACKEND_TARGET}
-  PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${RAPIDS_TRITON_BACKEND_CXX_FLAGS}>"
-  "$<$<COMPILE_LANGUAGE:CUDA>:${RAPIDS_TRITON_BACKEND_CUDA_FLAGS}>"
+  PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${DEV_TOOLS_BACKEND_CXX_FLAGS}>"
+  "$<$<COMPILE_LANGUAGE:CUDA>:${DEV_TOOLS_BACKEND_CUDA_FLAGS}>"
 )
 
 target_include_directories(${BACKEND_TARGET}
-  PRIVATE  "$<BUILD_INTERFACE:${RAPIDS_TRITON_BACKEND_SOURCE_DIR}/include>"
+  PRIVATE  "$<BUILD_INTERFACE:${DEVELOPER_TOOLS_BACKEND_SOURCE_DIR}/include>"
             "${CMAKE_CURRENT_SOURCE_DIR}/src"
 )
 
 target_link_libraries(${BACKEND_TARGET}
 PRIVATE
-  rapids_triton::rapids_triton
+  developer_tools::developer_tools
   triton-core-serverstub
   triton-backend-utils
   "${TRITONSERVER_LIB}"
