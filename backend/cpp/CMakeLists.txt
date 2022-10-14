@@ -15,7 +15,9 @@
 #=============================================================================
 
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
-file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-22.02/RAPIDS.cmake
+
+set(RAPIDS_DEPENDENCIES_VERSION "22.08" CACHE STRING "RAPIDS projects dependencies version")
+file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${RAPIDS_DEPENDENCIES_VERSION}/RAPIDS.cmake
     ${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 include(${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 include(rapids-cmake)
@@ -59,9 +61,9 @@ message(VERBOSE "DEV_TOOLS: Triton backend repo tag: ${TRITON_BACKEND_REPO_TAG}"
 
 if(TRITON_ENABLE_GPU)
   rapids_cuda_init_architectures(DEV_TOOLS)
-  project(DEV_TOOLS VERSION 22.02.00 LANGUAGES CXX CUDA)
+  project(DEV_TOOLS VERSION 22.10.00 LANGUAGES CXX CUDA)
 else()
-  project(DEV_TOOLS VERSION 22.02.00 LANGUAGES CXX)
+  project(DEV_TOOLS VERSION 22.10.00 LANGUAGES CXX)
 endif()
 
 
