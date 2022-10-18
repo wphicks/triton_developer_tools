@@ -42,5 +42,5 @@ endfunction()
 # CPM_raft_SOURCE=/path/to/local/raft
 find_and_configure_dev_tools(VERSION    22.10
                         FORK       wphicks
-                        PINNED_TAG fea-backend
+                        PINNED_TAG bug-raft_version
                         )
