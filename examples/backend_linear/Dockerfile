@@ -2,7 +2,7 @@
 # Arguments for controlling build details
 ###########################################################################################
 # Version of Triton to use
-ARG TRITON_VERSION=21.08
+ARG TRITON_VERSION=22.08
 # Base container image
 ARG BASE_IMAGE=nvcr.io/nvidia/tritonserver:${TRITON_VERSION}-py3
 # Whether or not to build indicated components
@@ -26,7 +26,7 @@ RUN wget \
     && bash Miniconda3-latest-Linux-x86_64.sh -b \
     && rm -f Miniconda3-latest-Linux-x86_64.sh 
 
-COPY ./conda/environments/rapids_triton_dev_cuda11.4.yml /environment.yml
+COPY ./conda/environments/dev_tools_dev_cuda11.4.yml /environment.yml
 
 RUN conda env update -f /environment.yml \
     && rm /environment.yml \
@@ -36,15 +36,15 @@ RUN conda env update -f /environment.yml \
 
 ENV PYTHONDONTWRITEBYTECODE=false
 
-RUN mkdir /rapids_triton
+RUN mkdir /dev_tools
 
-COPY ./src /rapids_triton/src
-COPY ./CMakeLists.txt /rapids_triton
-COPY ./cmake /rapids_triton/cmake
+COPY ./src /dev_tools/src
+COPY ./CMakeLists.txt /dev_tools
+COPY ./cmake /dev_tools/cmake
 
-WORKDIR /rapids_triton
+WORKDIR /dev_tools
 
-SHELL ["conda", "run", "--no-capture-output", "-n", "rapids_triton_dev", "/bin/bash", "-c"]
+SHELL ["conda", "run", "--no-capture-output", "-n", "dev_tools_dev", "/bin/bash", "-c"]
 
 FROM base as build-stage
 
@@ -58,15 +58,15 @@ ENV BUILD_TESTS=$BUILD_TESTS
 ARG BUILD_EXAMPLE
 ENV BUILD_EXAMPLE=$BUILD_EXAMPLE
 
-RUN mkdir /rapids_triton/build /rapids_triton/install
+RUN mkdir /dev_tools/build /dev_tools/install
 
-WORKDIR /rapids_triton/build
+WORKDIR /dev_tools/build
 
 RUN cmake \
       -GNinja \
       -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
       -DBUILD_TESTS="${BUILD_TESTS}" \
-      -DCMAKE_INSTALL_PREFIX=/rapids_triton/install \
+      -DCMAKE_INSTALL_PREFIX=/dev_tools/install \
       -DTRITON_COMMON_REPO_TAG="r${TRITON_VERSION}" \
       -DTRITON_CORE_REPO_TAG="r${TRITON_VERSION}" \
       -DTRITON_BACKEND_REPO_TAG="r${TRITON_VERSION}" \

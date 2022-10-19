@@ -22,8 +22,8 @@ function(find_and_configure_raft)
 
     rapids_cpm_find(raft ${PKG_VERSION}
       GLOBAL_TARGETS      raft::raft
-      BUILD_EXPORT_SET    rapids_triton-exports
-      INSTALL_EXPORT_SET  rapids_triton-exports
+      BUILD_EXPORT_SET    triton_backend-exports
+      INSTALL_EXPORT_SET  triton_backend-exports
         CPM_ARGS
             GIT_REPOSITORY https://github.com/${PKG_FORK}/raft.git
             GIT_TAG        ${PKG_PINNED_TAG}
@@ -43,7 +43,7 @@ set(DEV_TOOLS_BRANCH_VERSION_raft "${DEV_TOOLS_VERSION_MAJOR}.${DEV_TOOLS_VERSIO
 # Change pinned tag here to test a commit in CI
 # To use a different RAFT locally, set the CMake variable
 # CPM_raft_SOURCE=/path/to/local/raft
-find_and_configure_raft(VERSION    ${DEV_TOOLS_MIN_VERSION_raft}
+find_and_configure_raft(VERSION    ${RAPIDS_DEPENDENCIES_VERSION}
                         FORK       rapidsai
-                        PINNED_TAG branch-${DEV_TOOLS_BRANCH_VERSION_raft}
+                        PINNED_TAG branch-${RAPIDS_DEPENDENCIES_VERSION}
                         )

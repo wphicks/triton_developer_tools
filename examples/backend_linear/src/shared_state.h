@@ -19,20 +19,20 @@
 #include <names.h>
 
 #include <memory>
-#include <rapids_triton/model/shared_state.hpp>
-#include <rapids_triton/triton/logging.hpp>
+#include <triton_backend/model/shared_state.hpp>
+#include <triton_backend/triton/logging.hpp>
 #include <vector>
 
 namespace triton {
 namespace backend {
 namespace NAMESPACE {
 
-struct RapidsSharedState : rapids::SharedModelState {
+struct RapidsSharedState : dev_tools::SharedModelState {
   RapidsSharedState(std::unique_ptr<common::TritonJson::Value>&& config)
-      : rapids::SharedModelState{std::move(config)} {}
+      : dev_tools::SharedModelState{std::move(config)} {}
   void load() { alpha = get_config_param<float>("alpha"); }
   void unload() {
-    rapids::log_info(__FILE__, __LINE__) << "Unloading shared state...";
+    dev_tools::log_info(__FILE__, __LINE__) << "Unloading shared state...";
   }
 
   float alpha = 1.0f;

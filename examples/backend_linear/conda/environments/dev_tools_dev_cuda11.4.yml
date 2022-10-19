@@ -1,0 +1,14 @@
+---
+name: dev_tools_dev
+channels:
+  - nvidia
+  - conda-forge
+dependencies:
+  - ccache
+  - cmake>=3.23.1
+  - libstdcxx-ng<=11.2.0
+  - libgcc-ng<=11.2.0
+  - cudatoolkit=11.4
+  - doxygen>=1.8.20
+  - ninja
+  - rapidjson

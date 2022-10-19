@@ -15,4 +15,4 @@
  */
 
 #pragma once
-#define NAMESPACE rapids_linear
+#define NAMESPACE backend_linear

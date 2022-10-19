@@ -36,7 +36,7 @@ functions can be invoked in two ways and can optionally include file and line
 information. To add a logging message to your code, use one of the following
 invocations:
 ```cpp
-#include <rapids_triton/triton/logging.hpp>
+#include <triton_backend/triton/logging.hpp>
 
 void logging_example() {
   rapids::log_info() << "This is a log message.";
@@ -55,7 +55,7 @@ will not interfere with execution of other backends, models, or requests.
 `TritonException` objects are constructed with an error type and a message
 indicating what went wrong, as shown below:
 ```cpp
-#include <rapids_triton/exceptions.hpp>
+#include <triton_backend/exceptions.hpp>
 
 void error_example() {
   throw rapids::TritonException(rapids::Error::Internal, "Something bad happened!");
@@ -83,7 +83,7 @@ direct invocations of the CUDA API. If such an invocation fails, `cuda_check`
 will throw an appropriate `TritonException`:
 
 ```cpp
-#include <rapids_triton/exceptions.hpp>
+#include <triton_backend/exceptions.hpp>
 
 void cuda_check_example() {
   rapids::cuda_check(cudaSetDevice(0));
@@ -104,7 +104,7 @@ execution. While this is not required, RAPIDS-Triton includes a compile-time
 constant which can be useful for facilitating this:
 
 ```cpp
-#include <rapids_triton/build_control.hpp>
+#include <triton_backend/build_control.hpp>
 
 void do_a_gpu_thing() {
   if constexpr (rapids::IS_GPU_BUILD) {
@@ -137,7 +137,7 @@ placeholders in the main Triton codebase. A typical usage is shown below:
 #ifdef TRITON_ENABLE_GPU
 #include <cuda_runtime_api.h>
 #else
-#include <rapids_triton/cpu_only/cuda_runtime_replacement.hpp>
+#include <triton_backend/cpu_only/cuda_runtime_replacement.hpp>
 #endif
 // E.g. cudaStream_t is now defined regardless of whether or not this is a
 // CPU-only build.
@@ -162,8 +162,8 @@ show ways in which `Buffer` objects can be constructed and used:
 ```cpp
 #include <utility>
 #include <vector>
-#include <rapids_triton/memory/types.hpp>  // rapids::HostMemory and rapids::DeviceMemory
-#include <rapids_triton/memory/buffer.hpp> // rapids::Buffer
+#include <triton_backend/memory/types.hpp>  // rapids::HostMemory and rapids::DeviceMemory
+#include <triton_backend/memory/buffer.hpp> // rapids::Buffer
 
 void buffer_examples() {
   auto data = std::vector<int>{0, 1, 2, 3, 4};

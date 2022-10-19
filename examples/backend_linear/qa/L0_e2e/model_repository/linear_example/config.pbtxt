@@ -1,5 +1,5 @@
-name: "linear_example_cpu"
-backend: "rapids_linear"
+name: "linear_example"
+backend: "backend_linear"
 max_batch_size: 32768
 input [
   {
@@ -20,7 +20,7 @@ output [
     dims: [ 4 ]
   }
 ]
-instance_group [{ kind: KIND_CPU }]
+instance_group [{ kind: KIND_GPU }]
 parameters [
   {
     key: "alpha"

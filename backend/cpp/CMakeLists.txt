@@ -15,7 +15,9 @@
 #=============================================================================
 
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
-file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-22.02/RAPIDS.cmake
+
+set(RAPIDS_DEPENDENCIES_VERSION "22.08" CACHE STRING "RAPIDS projects dependencies version")
+file(DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${RAPIDS_DEPENDENCIES_VERSION}/RAPIDS.cmake
     ${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 include(${CMAKE_BINARY_DIR}/RAPIDS.cmake)
 include(rapids-cmake)
@@ -37,9 +39,9 @@ option(DETECT_CONDA_ENV "Enable detection of conda environment for dependencies"
 option(DISABLE_DEPRECATION_WARNINGS "Disable depreaction warnings " ON)
 option(NVTX "Enable nvtx markers" OFF)
 option(TRITON_ENABLE_STATS "Enable statistics collection in Triton" ON)
-set(TRITON_COMMON_REPO_TAG "r21.12" CACHE STRING "Tag for triton-inference-server/common repo")
-set(TRITON_CORE_REPO_TAG "r21.12" CACHE STRING "Tag for triton-inference-server/core repo")
-set(TRITON_BACKEND_REPO_TAG "r21.12" CACHE STRING "Tag for triton-inference-server/backend repo")
+set(TRITON_COMMON_REPO_TAG "r22.08" CACHE STRING "Tag for triton-inference-server/common repo")
+set(TRITON_CORE_REPO_TAG "r22.08" CACHE STRING "Tag for triton-inference-server/core repo")
+set(TRITON_BACKEND_REPO_TAG "r22.08" CACHE STRING "Tag for triton-inference-server/backend repo")
 
 message(VERBOSE "DEV_TOOLS: Build DEV_TOOLS unit-tests: ${BUILD_TESTS}")
 message(VERBOSE "DEV_TOOLS: Enable detection of conda environment for dependencies: ${DETECT_CONDA_ENV}")
@@ -58,10 +60,10 @@ message(VERBOSE "DEV_TOOLS: Triton backend repo tag: ${TRITON_BACKEND_REPO_TAG}"
 # - Project Initialization ---------------------------------------------------
 
 if(TRITON_ENABLE_GPU)
-  rapids_cuda_init_architectures(DEV_TOOLS)
-  project(DEV_TOOLS VERSION 22.02.00 LANGUAGES CXX CUDA)
+  rapids_cuda_init_architectures(TRITON_BACKEND)
+  project(TRITON_BACKEND VERSION 22.08.00 LANGUAGES CXX CUDA)
 else()
-  project(DEV_TOOLS VERSION 22.02.00 LANGUAGES CXX)
+  project(TRITON_BACKEND VERSION 22.08.00 LANGUAGES CXX)
 endif()
 
 
@@ -131,7 +133,7 @@ endif()
 
 add_library(triton_backend INTERFACE)
 add_library(triton_backend::triton_backend ALIAS triton_backend)
-target_include_directories(triton_backend INTERFACE "$<BUILD_INTERFACE:${DEV_TOOLS_SOURCE_DIR}/include>"
+target_include_directories(triton_backend INTERFACE "$<BUILD_INTERFACE:${TRITON_BACKEND_SOURCE_DIR}/include>"
                                           "$<INSTALL_INTERFACE:include>")
 
 target_link_libraries(triton_backend
