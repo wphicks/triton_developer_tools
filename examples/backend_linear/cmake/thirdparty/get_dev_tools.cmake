@@ -20,8 +20,8 @@ function(find_and_configure_dev_tools)
     cmake_parse_arguments(PKG "${options}" "${oneValueArgs}"
                           "${multiValueArgs}" ${ARGN} )
 
-    rapids_cpm_find(triton_developer_tools ${PKG_VERSION}
-      GLOBAL_TARGETS      developer_tools::developer_tools
+    rapids_cpm_find(triton_backend ${PKG_VERSION}
+      GLOBAL_TARGETS      triton_backend::triton_backend
       BUILD_EXPORT_SET    developer_tools_linear-exports
       INSTALL_EXPORT_SET  developer_tools_linear-exports
         CPM_ARGS
@@ -33,14 +33,14 @@ function(find_and_configure_dev_tools)
               "BUILD_EXAMPLE OFF"
     )
 
-  message(STATUS "dev_tools_LINEAR: Using developer_tools located in ${developer_tools_SOURCE_DIR}")
+  message(STATUS "dev_tools_LINEAR: Using triton_backend located in ${triton_backend_SOURCE_DIR}")
 
 endfunction()
 
 # Change pinned tag here to test a commit in CI
 # To use a different RAFT locally, set the CMake variable
 # CPM_raft_SOURCE=/path/to/local/raft
-find_and_configure_dev_tools(VERSION    22.10
+find_and_configure_dev_tools(VERSION    22.08
                         FORK       wphicks
                         PINNED_TAG linear-example
                         )

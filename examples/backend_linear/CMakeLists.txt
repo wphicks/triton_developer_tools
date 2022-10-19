@@ -33,9 +33,9 @@ include(rapids-cuda)
 include(rapids-export)
 include(rapids-find)
 
-rapids_cuda_init_architectures(dev_tools_BACKEND)
+rapids_cuda_init_architectures(DEV_TOOLS_BACKEND)
 
-project(dev_tools_BACKEND VERSION 22.08.00 LANGUAGES CXX CUDA)
+project(DEV_TOOLS_BACKEND VERSION 22.08.00 LANGUAGES CXX CUDA)
 
 ##############################################################################
 # - build type ---------------------------------------------------------------
@@ -116,6 +116,18 @@ add_library(
 
 set_target_properties(${BACKEND_TARGET}
 PROPERTIES BUILD_RPATH                         "\$ORIGIN"
+            INSTALL_RPATH                       "\$ORIGIN"
+            # set target compile options
+            CXX_STANDARD                        17
+            CXX_STANDARD_REQUIRED               ON
+            CUDA_STANDARD                       17
+            CUDA_STANDARD_REQUIRED              ON
+            POSITION_INDEPENDENT_CODE           ON
+            INTERFACE_POSITION_INDEPENDENT_CODE ON
+)
+
+set_target_properties(${BACKEND_TARGET}
+PROPERTIES BUILD_RPATH                         "\$ORIGIN"
            # set target compile options
            CXX_STANDARD                        17
            CXX_STANDARD_REQUIRED               ON
@@ -131,13 +143,13 @@ target_compile_options(${BACKEND_TARGET}
 )
 
 target_include_directories(${BACKEND_TARGET}
-  PRIVATE  "$<BUILD_INTERFACE:${DEVELOPER_TOOLS_BACKEND_SOURCE_DIR}/include>"
+  PRIVATE  "$<BUILD_INTERFACE:${DEV_TOOLS_BACKEND_SOURCE_DIR}/include>"
             "${CMAKE_CURRENT_SOURCE_DIR}/src"
 )
 
 target_link_libraries(${BACKEND_TARGET}
 PRIVATE
-  developer_tools::developer_tools
+  triton_backend::triton_backend
   triton-core-serverstub
   triton-backend-utils
   "${TRITONSERVER_LIB}"

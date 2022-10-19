@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #=============================================================================
+set(BUILD_SHARED_LIBS OFF)
 include(FetchContent)
 
 FetchContent_Declare(
@@ -34,3 +35,4 @@ FetchContent_Declare(
   GIT_SHALLOW ON
 )
 FetchContent_MakeAvailable(repo-common repo-core repo-backend)
+set(BUILD_SHARED_LIBS ON)

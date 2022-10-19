@@ -1,5 +1,5 @@
 name: "linear_example"
-backend: "rapids_linear"
+backend: "backend_linear"
 max_batch_size: 32768
 input [
   {
